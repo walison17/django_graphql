@@ -1,3 +1,5 @@
+from django.db import models
+
 import graphene
 from graphene_django.types import DjangoObjectType
 from graphene_django.forms.mutation import DjangoModelFormMutation
@@ -28,12 +30,17 @@ class SongType(DjangoObjectType):
 
 
 class Query:
-    all_artists = graphene.List(ArtistType)
+    all_artists = graphene.List(ArtistType, genre=graphene.String())
     all_songs = graphene.List(SongType)
     artist = graphene.Field(ArtistType, name=graphene.String())
 
-    def resolve_all_artists(self, info, **kwargs):
-        return Artist.objects.prefetch_related('albums', 'albums__songs')
+    def resolve_all_artists(self, info, genre=None, **kwargs):
+        artists = Artist.objects.prefetch_related('albums', 'albums__songs')
+
+        if genre:
+            artists = artists.filter(genre=genre)
+
+        return artists
 
     def resolve_all_songs(self, info, **kwargs):
         return Song.objects.select_related('album')
