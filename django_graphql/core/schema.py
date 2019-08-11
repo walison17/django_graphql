@@ -28,9 +28,13 @@ class SongType(DjangoObjectType):
 class Query:
     all_artists = graphene.List(ArtistType)
     all_songs = graphene.List(SongType)
+    artist = graphene.Field(ArtistType, name=graphene.String())
 
     def resolve_all_artists(self, info, **kwargs):
         return Artist.objects.prefetch_related('albums', 'albums__songs')
 
     def resolve_all_songs(self, info, **kwargs):
         return Song.objects.select_related('album')
+
+    def resolve_artist(self, info, name):
+        return Artist.objects.get(name=name)
