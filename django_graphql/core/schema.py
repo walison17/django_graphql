@@ -1,7 +1,9 @@
 import graphene
-
 from graphene_django.types import DjangoObjectType
+from graphene_django.forms.mutation import DjangoModelFormMutation
+
 from django_graphql.core.models import Artist, Album, Song
+from django_graphql.core.forms import ArtistForm
 
 
 class ArtistType(DjangoObjectType):
@@ -38,3 +40,14 @@ class Query:
 
     def resolve_artist(self, info, name):
         return Artist.objects.get(name=name)
+
+
+class CreateArtist(DjangoModelFormMutation):
+    artist = graphene.Field(ArtistType)
+
+    class Meta:
+        form_class = ArtistForm
+
+
+class Mutation:
+    create_artist = CreateArtist.Field()
