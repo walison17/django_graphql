@@ -3,6 +3,7 @@ from django.db import models
 
 class Artist(models.Model):
     name = models.CharField('Nome', max_length=50)
+    genre = models.CharField('Gênero', max_length=50)
 
     class Meta:
         ordering = ('name', )

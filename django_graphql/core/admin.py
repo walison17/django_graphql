@@ -10,6 +10,7 @@ class AlbumInline(admin.StackedInline):
 
 @admin.register(Artist)
 class ArtistAdmin(admin.ModelAdmin):
+    list_display = ('name', 'genre')
     inlines = [AlbumInline]
 
 
