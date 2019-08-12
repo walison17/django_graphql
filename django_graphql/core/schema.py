@@ -1,6 +1,5 @@
-from django.db import models
-
 import graphene
+import graphql_jwt
 from graphene_django.types import DjangoObjectType
 from graphene_django.forms.mutation import DjangoModelFormMutation
 
@@ -56,5 +55,16 @@ class CreateArtist(DjangoModelFormMutation):
         form_class = ArtistForm
 
 
+class AuthenticateUser(graphql_jwt.JSONWebTokenMutation):
+    id = graphene.Int()
+
+    @classmethod
+    def resolve(cls, root, info, **kwargs):
+        return cls(id=info.context.user.pk)
+
+
 class Mutation:
     create_artist = CreateArtist.Field()
+    authenticate_user = AuthenticateUser.Field()
+    verify_token = graphql_jwt.Verify.Field()
+    refresh_token = graphql_jwt.Refresh.Field()
