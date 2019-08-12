@@ -16,4 +16,4 @@ class ArtistAdmin(admin.ModelAdmin):
 
 @admin.register(Song)
 class SongModel(admin.ModelAdmin):
-    list_display = ('number', 'name', 'size')
+    list_display = ('number', 'name', 'duration')

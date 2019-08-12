@@ -28,7 +28,7 @@ class Album(models.Model):
 
 class Song(models.Model):
     name = models.CharField('Nome', max_length=50)
-    size = models.TimeField('Tamanho')
+    duration = models.TimeField('Duração')
     number = models.IntegerField('Número')
     album = models.ForeignKey(
         Album, on_delete=models.CASCADE, related_name='songs'
